@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+requests
+python-dotenv
+transformers
+faiss-cpu
+langchain
+langchain-google-genai
+GitPython
