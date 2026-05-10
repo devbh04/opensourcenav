@@ -79,3 +79,4 @@ next-env.d.ts
 vector.index
 doc_map.pkl
 tutorial_data.json
+.vscode

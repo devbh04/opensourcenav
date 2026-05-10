@@ -1,0 +1,26 @@
+# Core
+fastapi==0.115.12
+uvicorn[standard]==0.34.3
+python-dotenv==1.1.0
+pydantic==2.11.3
+websockets==15.0.1
+
+# LLM & Agents
+langchain==0.3.25
+langchain-google-genai==2.1.4
+langgraph==0.4.7
+
+# Vector DB
+qdrant-client==1.14.2
+sentence-transformers==4.1.0
+
+# MongoDB
+motor==3.7.0
+pymongo==4.12.1
+
+# GitHub
+httpx==0.28.1
+GitPython==3.1.44
+
+# Utilities
+tiktoken==0.9.0
