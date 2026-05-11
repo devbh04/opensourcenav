@@ -141,26 +141,25 @@ def get_file_tree(repo_path: str) -> list[dict]:
     repo_root = Path(repo_path)
     tree = []
 
+    SKIP_DIRS = {"node_modules", "__pycache__", ".git", "venv", ".venv", "dist", "build", ".next", ".tox", "egg-info"}
+
     for item in sorted(repo_root.iterdir()):
         if item.name.startswith("."):
             continue
-        if item.name in ("node_modules", "__pycache__", ".git", "venv", ".venv", "dist", "build"):
+        if item.name in SKIP_DIRS:
             continue
 
         rel = str(item.relative_to(repo_root))
         node = {"name": item.name, "path": rel, "type": "dir" if item.is_dir() else "file"}
         if item.is_dir():
-            node["children"] = _build_tree(item, repo_root, depth=0, max_depth=4)
+            node["children"] = _build_tree(item, repo_root, SKIP_DIRS)
         tree.append(node)
 
     return tree
 
 
-def _build_tree(path: Path, repo_root: Path, depth: int, max_depth: int) -> list[dict]:
-    """Recursively build directory tree up to max_depth."""
-    if depth >= max_depth:
-        return []
-
+def _build_tree(path: Path, repo_root: Path, skip_dirs: set[str]) -> list[dict]:
+    """Recursively build directory tree with NO depth limit."""
     children = []
     try:
         items = sorted(path.iterdir())
@@ -170,13 +169,13 @@ def _build_tree(path: Path, repo_root: Path, depth: int, max_depth: int) -> list
     for item in items:
         if item.name.startswith("."):
             continue
-        if item.name in ("node_modules", "__pycache__", ".git", "venv", ".venv"):
+        if item.name in skip_dirs:
             continue
 
         rel = str(item.relative_to(repo_root))
         node = {"name": item.name, "path": rel, "type": "dir" if item.is_dir() else "file"}
         if item.is_dir():
-            node["children"] = _build_tree(item, repo_root, depth + 1, max_depth)
+            node["children"] = _build_tree(item, repo_root, skip_dirs)
         children.append(node)
 
     return children

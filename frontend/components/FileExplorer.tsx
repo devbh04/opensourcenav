@@ -193,7 +193,7 @@ function FolderRow({
   onSelectFolder: (paths: string[], allSelected: boolean) => void
   query: string
 }) {
-  const [isOpen, setIsOpen] = useState(depth < 2)
+  const [isOpen, setIsOpen] = useState(true)
   const childPaths = useMemo(() => getFilePaths(node), [node])
 
   const selectedCount = childPaths.filter(p => selectedFiles.has(p)).length
@@ -208,6 +208,8 @@ function FolderRow({
   }, [query, node, childPaths])
 
   if (!hasMatch) return null
+
+  const actuallyOpen = isOpen || Boolean(query)
 
   return (
     <div>
@@ -228,12 +230,12 @@ function FolderRow({
           className="flex items-center gap-1.5 min-w-0 flex-1 text-left"
           onClick={() => setIsOpen(!isOpen)}
         >
-          {isOpen
+          {actuallyOpen
             ? <ChevronDown className="h-3 w-3 shrink-0 text-muted-foreground" />
             : <ChevronRight className="h-3 w-3 shrink-0 text-muted-foreground" />
           }
           <svg viewBox="0 0 16 16" className="w-3.5 h-3.5 shrink-0 text-yellow-400 fill-current">
-            {isOpen
+            {actuallyOpen
               ? <path d="M1.75 2.5a.25.25 0 0 0-.25.25v10.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V5.5a.25.25 0 0 0-.25-.25H7.414l-1.06-1.06A.25.25 0 0 0 6.18 4H1.75a.25.25 0 0 0-.25.25V4Z"/>
               : <path d="M.513 1.513A1.75 1.75 0 0 1 1.75 1h3.5c.55 0 1.07.26 1.4.7l.9 1.2h6.7A1.75 1.75 0 0 1 16 4.75v7.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25V3a1.75 1.75 0 0 1 .513-1.237Z"/>
             }
@@ -247,7 +249,7 @@ function FolderRow({
         </button>
       </div>
 
-      {isOpen && (
+      {actuallyOpen && (
         <div>
           {(node.children || []).map((child, i) =>
             child.type === "file" ? (

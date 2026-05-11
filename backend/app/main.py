@@ -195,16 +195,14 @@ async def prepare_repo(req: PrepareRepoRequest):
         raise HTTPException(status_code=422, detail=f"Failed to clone repository: {str(e)[:200]}")
 
     # Collect ALL files for the explorer UI.
-    # We pass a broad set of common extensions instead of "*" because
-    # fnmatch("src/app.py", "*") is False on most platforms (doesn't cross slashes).
-    # Passing None for include_patterns makes collect_files use DEFAULT_INCLUDE_PATTERNS,
-    # but we want to show EVERYTHING — so we skip pattern filtering entirely.
+    # Use a catch-all include pattern so every file type shows up in the tree.
     all_files_raw = _collect_all(
         repo_path,
-        include_patterns=None,   # None → uses DEFAULT_INCLUDE_PATTERNS (broad enough)
+        include_patterns=["*", "*.*"],   # Match everything
         exclude_patterns=[".git/*", ".git/**", "*.ico", "*.png", "*.jpg",
                           "*.gif", "*.woff", "*.woff2", "*.ttf", "*.eot",
-                          "*.mp4", "*.mp3", "*.wav"],
+                          "*.mp4", "*.mp3", "*.wav", "node_modules/*",
+                          "__pycache__/*", ".next/*", ".venv/*", "venv/*"],
     )
     all_file_paths = [f["relative_path"] for f in all_files_raw]
 

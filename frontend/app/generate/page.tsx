@@ -5,8 +5,9 @@ import { useState, useCallback, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import {
   ArrowRight, GitBranch, Loader2, ChevronRight, FileCode2,
-  CheckCircle2, AlertCircle, Settings2, RotateCcw, Zap
+  CheckCircle2, AlertCircle, Settings2, RotateCcw, Zap, Info
 } from "lucide-react"
+import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -117,7 +118,12 @@ function GenerateContent() {
           return matchInclude && !matchExclude
         })
       )
-      setSelectedFiles(preSelected)
+      
+      const limitedPreSelected = new Set(Array.from(preSelected).slice(0, 40))
+      if (preSelected.size > 40) {
+        toast.warning("Only the first 40 matching files were pre-selected due to resource limits.")
+      }
+      setSelectedFiles(limitedPreSelected)
       setStep("files")
     } catch (err) {
       setFetchError("Network error. Is the backend running?")
@@ -136,14 +142,25 @@ function GenerateContent() {
   const handleSelectFile = useCallback((path: string, checked: boolean) => {
     setSelectedFiles(prev => {
       const next = new Set(prev)
-      if (checked) next.add(path)
-      else next.delete(path)
+      if (checked) {
+        if (next.size >= 40) {
+          toast.error("Maximum limit of 40 files reached.")
+          return prev
+        }
+        next.add(path)
+      } else {
+        next.delete(path)
+      }
       return next
     })
   }, [])
 
   const handleSelectAll = useCallback(() => {
-    setSelectedFiles(new Set(allFilePaths))
+    const nextFiles = allFilePaths.slice(0, 40)
+    setSelectedFiles(new Set(nextFiles))
+    if (allFilePaths.length > 40) {
+      toast.warning("Select All applied, but limited to the maximum of 40 files.")
+    }
   }, [allFilePaths])
 
   const handleClearAll = useCallback(() => {
@@ -157,8 +174,22 @@ function GenerateContent() {
         // All selected → deselect them
         paths.forEach(p => next.delete(p))
       } else {
-        // Some or none selected → select all
-        paths.forEach(p => next.add(p))
+        // Some or none selected → select all, up to 40
+        let addedCount = 0
+        let hitLimit = false
+        for (const p of paths) {
+          if (!next.has(p)) {
+            if (next.size >= 40) {
+              hitLimit = true
+              break
+            }
+            next.add(p)
+            addedCount++
+          }
+        }
+        if (hitLimit) {
+          toast.error("Maximum limit of 40 files reached.")
+        }
       }
       return next
     })
@@ -306,6 +337,13 @@ function GenerateContent() {
                   <Zap className="h-3.5 w-3.5 mr-1.5" />
                   Generate Docs ({selectedFiles.size} files)
                 </Button>
+              </div>
+            </div>
+
+            <div className="text-amber-600 dark:text-amber-400 p-3 rounded-lg flex items-start gap-3 text-sm">
+              <Info className="h-5 w-5 shrink-0 mt-0.5" />
+              <div>
+                <strong>Broke Engineer Alert 🚨:</strong> Due to limited cloud resources (and my shrinking bank account), you can only select a <strong>maximum of 40 files</strong> for documentation generation at a time. Choose your files wisely!
               </div>
             </div>
 
