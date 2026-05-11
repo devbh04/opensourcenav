@@ -238,19 +238,25 @@ export default function LandingPage() {
                         .catch(() => router.push(`/generate?url=${encodeURIComponent(repoUrl.trim())}`))
                     }
                   }} 
-                  className="flex flex-col sm:flex-row gap-3"
+                  className="flex flex-col gap-2"
                 >
-                  <Input 
-                    placeholder="https://github.com/owner/repo" 
-                    className="flex-1 h-12 text-base"
-                    value={repoUrl}
-                    onChange={(e) => setRepoUrl(e.target.value)}
-                    required
-                  />
-                  <Button type="submit" className="h-12 px-8 text-base" disabled={isLoading}>
-                    {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                    Generate Docs <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground text-left ml-1">
+                    <AlertCircle className="h-3.5 w-3.5 text-amber-500 shrink-0" />
+                    <span>Please submit small repositories due to limited cloud resources.</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Input 
+                      placeholder="https://github.com/owner/repo" 
+                      className="flex-1 h-12 text-base"
+                      value={repoUrl}
+                      onChange={(e) => setRepoUrl(e.target.value)}
+                      required
+                    />
+                    <Button type="submit" className="h-12 px-8 text-base" disabled={isLoading}>
+                      {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                      Generate Docs <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </div>
                 </form>
               </CardContent>
             </Card>
