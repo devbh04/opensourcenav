@@ -22,7 +22,7 @@ const DEFAULT_EXCLUDE = `node_modules/*, .git/*, __pycache__/*, *.pyc, dist/*, b
 
 type Step = "url" | "files" | "generating"
 
-export default function GeneratePage() {
+function GenerateContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -432,6 +432,14 @@ export default function GeneratePage() {
         )}
       </main>
     </div>
+  )
+}
+
+export default function GeneratePage() {
+  return (
+    <React.Suspense fallback={<div className="flex items-center justify-center min-h-screen"><Loader2 className="h-8 w-8 animate-spin" /></div>}>
+      <GenerateContent />
+    </React.Suspense>
   )
 }
 
