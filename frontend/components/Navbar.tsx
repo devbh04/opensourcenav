@@ -15,7 +15,6 @@ export function Navbar() {
       <div className="container flex h-14 items-center px-4 md:px-8 max-w-7xl mx-auto">
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <BookOpen className="h-6 w-6" />
             <span className="hidden font-bold sm:inline-block">
               EasyGit
             </span>
@@ -46,7 +45,7 @@ export function Navbar() {
             {/* Search can go here later */}
           </div>
           <nav className="flex items-center space-x-2">
-            <Link href="https://github.com" target="_blank" rel="noreferrer">
+            <Link href="https://github.com/devbh04/opensourcenav.git" target="_blank" rel="noreferrer">
               <Button variant="ghost" size="icon" className="w-9 px-0">
                 <GitFork className="h-4 w-4" />
                 <span className="sr-only">GitHub</span>
