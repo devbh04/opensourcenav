@@ -109,7 +109,7 @@ export default function LandingPage() {
     const loadInitialDocs = async () => {
       try {
         setIsLoadingDocs(true)
-        const res = await fetch(`${API_URL}/docs?skip=0&limit=16`)
+        const res = await fetch(`/api/docs?skip=0&limit=16`)
         if (res.ok) {
           const data = await res.json()
           setGeneratedDocs(data.docs)
@@ -130,7 +130,7 @@ export default function LandingPage() {
     if (!hasMoreDocs || isLoadingDocs) return
     try {
       setIsLoadingDocs(true)
-      const res = await fetch(`${API_URL}/docs?skip=${skipDocs}&limit=16`)
+      const res = await fetch(`/api/docs?skip=${skipDocs}&limit=16`)
       if (res.ok) {
         const data = await res.json()
         setGeneratedDocs(prev => [...prev, ...data.docs])
@@ -160,7 +160,7 @@ export default function LandingPage() {
     if (owner && repo) {
       try {
         // Check if docs already exist
-        const checkRes = await fetch(`${API_URL}/docs/${owner}/${repo}`)
+        const checkRes = await fetch(`/api/docs/${owner}/${repo}`)
         if (checkRes.ok) {
           setStatusText("Documentation already exists! Redirecting in 3 seconds...")
           setProgress(100)
@@ -224,7 +224,7 @@ export default function LandingPage() {
                     const repo = urlParts.pop()
                     const owner = urlParts.pop()
                     if (owner && repo) {
-                      fetch(`${API_URL}/docs/${owner}/${repo}`)
+                      fetch(`/api/docs/${owner}/${repo}`)
                         .then(r => {
                           if (r.ok) {
                             setIsLoading(true)
