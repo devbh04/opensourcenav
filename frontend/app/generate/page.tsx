@@ -322,20 +322,20 @@ function GenerateContent() {
         {/* ── Step 2: File Explorer ── */}
         {step === "files" && (
           <div className="flex flex-col gap-4 h-full">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h1 className="text-2xl font-bold">{repoName}</h1>
+                <h1 className="text-2xl font-bold truncate">{repoName}</h1>
                 <p className="text-sm text-muted-foreground mt-0.5">
                   {repoStats.total_files} files · {repoStats.total_size_mb}MB · {(repoStats.languages || []).slice(0, 3).join(", ")}
                 </p>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <Button variant="outline" size="sm" onClick={() => { setStep("url"); setSessionId(""); }}>
-                  <RotateCcw className="h-3.5 w-3.5 mr-1.5" /> Change Repo
+                  <RotateCcw className="h-3.5 w-3.5 mr-1.5" /> Change
                 </Button>
                 <Button size="sm" onClick={handleGenerate} disabled={selectedFiles.size === 0}>
                   <Zap className="h-3.5 w-3.5 mr-1.5" />
-                  Generate Docs ({selectedFiles.size} files)
+                  Generate ({selectedFiles.size})
                 </Button>
               </div>
             </div>

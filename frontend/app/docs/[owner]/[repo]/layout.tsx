@@ -4,6 +4,7 @@ import { notFound } from "next/navigation"
 import { Navbar } from "@/components/Navbar"
 import { DocsSidebar } from "@/components/DocsSidebar"
 import { Chatbot } from "@/components/Chatbot"
+import { MobileDocsNav } from "@/components/MobileDocsNav"
 
 async function getDocMeta(owner: string, repo: string) {
   try {
@@ -37,6 +38,12 @@ export default async function DocsLayout({
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
+      <MobileDocsNav 
+        navigation={navigation}
+        repoName={`${resolvedParams.owner}/${resolvedParams.repo}`}
+        owner={resolvedParams.owner}
+        repo={resolvedParams.repo}
+      />
       <div className="container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10 max-w-7xl mx-auto px-4 md:px-8">
         <DocsSidebar 
           navigation={navigation} 

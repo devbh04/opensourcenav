@@ -19,12 +19,16 @@ export function DocsSidebar({
   navigation, 
   repoName,
   owner,
-  repo
+  repo,
+  className,
+  onLinkClick
 }: { 
   navigation: NavItem[]
   repoName: string
   owner: string
   repo: string
+  className?: string
+  onLinkClick?: () => void
 }) {
   const pathname = usePathname()
   const basePath = `/docs/${owner}/${repo}`
@@ -52,6 +56,7 @@ export function DocsSidebar({
             <li key={index}>
               <Link
                 href={isActive ? "#" : itemPath}
+                onClick={() => onLinkClick?.()}
                 className={cn(
                   "block px-2 py-1.5 text-sm rounded-md transition-colors",
                   isActive 
@@ -69,7 +74,7 @@ export function DocsSidebar({
   }
 
   return (
-    <aside className="fixed top-14 z-30 -ml-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 md:sticky md:block md:w-64">
+    <aside className={cn("fixed top-14 z-30 -ml-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 md:sticky md:block md:w-64", className)}>
       <ScrollArea className="h-full py-6 pr-6 lg:py-8">
         <div className="mb-4 px-2 font-semibold tracking-tight text-lg">
           {repoName}
